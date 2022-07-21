@@ -1,12 +1,10 @@
 
-from email import message
-from pickle import TRUE
 from sqlalchemy import create_engine    
 import pandas as pd
 from openpyxl import load_workbook
-import os
-
+from os import walk
 from Class_Data.Command import Filter 
+import bu_module as bu_md
 DEBUG_ON = 1
 DEBUG_OFF = 0
 
@@ -15,13 +13,16 @@ D_read_sheets = DEBUG_OFF
 D_create_new_excel = DEBUG_OFF
 D_load_spr_info_excel = DEBUG_OFF
 D_make_df_spr_info = DEBUG_OFF
+D_load_spr_in_folds = DEBUG_OFF
+D_make_df_from_arr = DEBUG_OFF
+
 
 
 D_load_time_excel = DEBUG_OFF
 D_load_cur_plan_excel = DEBUG_OFF
 D_make_df_plan_sum = DEBUG_OFF
 D_make_df_plan_jobs = DEBUG_OFF
-D_make_df_from_arr = DEBUG_OFF
+
 D_update_df_from_arr = DEBUG_OFF
 D_save_time_excel = DEBUG_OFF
 D_connect_sql_server = DEBUG_OFF
@@ -81,11 +82,8 @@ def create_new_excel():
             print(f"CODE : {ERROR} ") 
 
 # FUNCTION CODE : load_spr_info_excel
-# path = 파일이 있는 경로명
-# file = 파일명.xlsx
-# src  = path + file     
 # 
-# comment : 시간분석테이블에 내용을 읽어온다. 
+# comment : 
 ###############################################################################################    
 def load_spr_info_excel():
     path = r"D:\97. 업무공유파일\004. 영업\002. SPR 특가요청 DIOS\001. SPR INFO/"
@@ -107,9 +105,8 @@ def load_spr_info_excel():
             print(f"CODE : {ERROR} ")
 
 
-# FUNCTION CODE : make_df_plan_sum
-# path 
-# file        : 
+# FUNCTION CODE : make_df_spr_info
+#
 # comment : 
 ###############################################################################################    
 def make_df_spr_info(self, org_df, filter= 0):
@@ -125,6 +122,8 @@ def make_df_spr_info(self, org_df, filter= 0):
             v_arr_sum_jobs_col_addr.append(i)
         
         df_plan_sum = org_df.iloc[SUM_SPR_FST_COL : SUM_SPR_END_COL, v_arr_sum_jobs_col_addr].dropna()
+        df_plan_sum['SPR_Req'] = df_plan_sum['SPR_Req'].apply(lambda x: pd.Timestamp(x).strftime("%Y-%m-%d"))
+
         # df_plan_sum.insert(0,"날짜", v_str_cur_date)
         
         if filter == Filter.PATHNER:
@@ -144,6 +143,11 @@ def make_df_spr_info(self, org_df, filter= 0):
 
         elif filter == Filter.PROJECT:
             cond = df_plan_sum['LGES'] == self.ed1_1.text()     
+            df_filter = df_plan_sum[cond]
+            df_plan_sum = df_filter
+        
+        elif filter == Filter.DATE:
+            cond = df_plan_sum['SPR_Req'] > self.ed1_2.text()     
             df_filter = df_plan_sum[cond]
             df_plan_sum = df_filter
 
@@ -177,6 +181,78 @@ def make_df_spr_info(self, org_df, filter= 0):
             ERROR = f'make_df_spr_info : ERROR DateFrame from the Sequence'
             print(f"CODE : {ERROR} ") 
 
+
+# FUNCTION CODE : load_spr_in_folds
+# 
+# comment : 폴더내 엑셀파일을 읽어서 원하는 형태의 DATAFRAME 을 만들어, 배열로 돌려준다. 
+###############################################################################################    
+def load_spr_in_folds():
+    path = r"D:\97. 업무공유파일\004. 영업\002. SPR 특가요청 DIOS\002. SPR DB\SPR FROM DIOS RAW/"
+    frame = []
+    col_name = ["SPR","MLFB","Option","PG","BU","LLP","Factor","Price","Qty","Total","Dis","Description"]
+
+    try :
+        for (dirpath, dirnames, filenames) in walk(path):
+            for file in filenames:
+                if not file.startswith("~") and file.endswith(".xlsx"):
+                    src = path + file
+                    file_name = file[:-9]
+                    df = pd.read_excel(src, sheet_name= 0)    
+                    df = df.iloc[:,[3,7,8,15,9,11,5]]
+                    df.insert(0,"SPR", file_name)
+                    df.insert(2,"Option", "Option")
+                    df.insert(4,"BU", "BU")
+                    df.insert(6,"Factor", "Factor")
+                    df.insert(9,"Total", "TOTAL")
+                    df.columns = col_name
+                    df["Option"] = df["MLFB"].apply(bu_md.get_mlfb)
+                    df["BU"] = df["PG"].apply(bu_md.get_bu)
+                    df["Factor"] = df["Dis"].apply(bu_md.get_factor).apply(lambda x: round(x,3))
+                    df["Total"] = df["Price"] * df["Qty"]
+                    df = df.reset_index(drop=True)
+                    
+                    frame.append(df)
+        
+        if debug or D_load_spr_in_folds: 
+            SUCCESS = f'load_time_excel : SUCCESS'
+            print(f"CODE : {SUCCESS} ") 
+            print(f"CODE : {frame} ") 
+        
+        return frame
+        
+    except :
+        if debug or D_load_spr_in_folds: 
+            ERROR = f'load_time_excel : ERROR 없는 시트에 접근 하였음'
+            print(f"CODE : {ERROR} ")
+
+# FUNCTION CODE : D_make_df_from_arr
+# 
+# 
+# comment : df 배열을 concat 해서 돌려주는 함수, update 가 아닌 그대로 저장
+###############################################################################################    
+def make_df_from_arr(arr_df_frame):
+    v_arr_jobs = arr_df_frame
+    # v_df_jobs =[]
+    
+    
+    try:
+        v_df_jobs = v_arr_jobs[0]
+        
+        for i in range(0,len(v_arr_jobs)):
+            v_df_jobs = pd.concat([v_df_jobs,v_arr_jobs[i]],axis=0)
+        
+
+        if debug or D_make_df_from_arr: 
+            SUCCESS = f'make_df_from_arr : SUCCESS'
+            print(f"CODE : {SUCCESS} ") 
+            print(f"CODE : {v_df_jobs} ") 
+        
+        return v_df_jobs
+    
+    except :
+        if debug or D_make_df_from_arr: 
+            ERROR = f'make_df_from_arr : ERROR DateFrame from the Sequence'
+            print(f"CODE : {ERROR} ") 
 
 
 # FUNCTION CODE = load_time_excel_from_server() 
@@ -439,35 +515,6 @@ def make_df_plan_jobs(org_df):
             ERROR = f'make_df_plan_jobs : ERROR 데이터 프레임 만들기 실패'
             print(f"CODE : {ERROR} ") 
 
-# FUNCTION CODE : D_make_df_from_arr
-# 
-# 
-# comment : df 배열을 concat 해서 돌려주는 함수, update 가 아닌 그대로 저장
-###############################################################################################    
-def make_df_from_arr(arr_df_frame):
-    v_arr_jobs = arr_df_frame
-    v_df_jobs = [[],[],[]]
-    
-    
-    try:
-        for i in range(0,len(v_arr_jobs)):
-                v_df_jobs[i] = v_arr_jobs[i][0]
-                for j in range(0,len(v_arr_jobs[i])):
-                    v_df_jobs[i] = pd.concat([v_df_jobs[i],v_arr_jobs[i][j]],axis=0)
-                    v_df_jobs[i] = v_df_jobs[i].drop_duplicates("날짜").reset_index(drop=True)
-        
-
-        if debug or D_make_df_from_arr: 
-            SUCCESS = f'make_df_from_arr : SUCCESS'
-            print(f"CODE : {SUCCESS} ") 
-            print(f"CODE : {v_df_jobs} ") 
-        
-        return v_df_jobs
-    
-    except :
-        if debug or D_make_df_from_arr: 
-            ERROR = f'make_df_from_arr : ERROR DateFrame from the Sequence'
-            print(f"CODE : {ERROR} ") 
 
 # FUNCTION CODE : D_update_df_from_arr
 # 

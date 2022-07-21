@@ -51,6 +51,8 @@ def ui_process1(self, cmd, date= '220701', sht_num_cnt = 0):
             message = Cmd.INPUT_CLR.name
             log(self, message, clear = True) 
             self.ed1_1.setText("")
+            self.ed1_2.setText("")
+            self.ed1_3.setText("")
             self.ed2_1.setText("")
             self.ed2_2.setText("")
             self.ed2_3.setText("")
@@ -102,6 +104,13 @@ def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
                 message = 'MAKE DF SPR INFO'
                 log(self, message)
             
+            elif self.rbt5.isChecked():
+                message = Filter.DATE.name
+                log(self, message)
+                df = md.make_df_spr_info(self, df, Filter.DATE)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+            
             else :
                 df = md.make_df_spr_info(self, df, Filter.NONE)
                 message = 'MAKE DF SPR INFO'
@@ -115,12 +124,30 @@ def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
             
         
         if v_str_command == Cmd.FILE_JOB_0:
+            bar_timer_on(self, "start",10)
             message = Cmd.FILE_JOB_0.name
-            log(self, message)    
+            log(self, message)
+
+            frame = md.load_spr_in_folds()
+            message = 'md.load_spr_in_folds()'
+            log(self, message)
+
+            df = md.make_df_from_arr(frame)
+            message = 'md.make_df_from_arr(frame)'
+            log(self, message)
+
+            uimd.set_df_table(self,df, 11)
+            message = 'uimd.set_df_table(self,df, 11)'
+            log(self, message)
+
+
+
         
         if v_str_command == Cmd.FILE_JOB_1:
             message = Cmd.FILE_JOB_1.name
             log(self, message)    
+            
+            
         
         if v_str_command == Cmd.CONVERT:
             message = Cmd.CONVERT.name

@@ -37,39 +37,60 @@ class Exam(QMainWindow,Ui_MainWindow):
     
     def defineItem(self):
         # 추가 할것이 있다면 이곳에서 만들기 
+        self.ed1_2 = QLineEdit()
+        self.ed1_3 = QLineEdit()
+        self.ed1_2.setPlaceholderText('2022-04')
+        self.ed1_3.setPlaceholderText('2022-06')
+        self.ed1_2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.ed1_3.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
         self.rbt0 = QRadioButton(self)
         self.rbt1 = QRadioButton(self)
         self.rbt2 = QRadioButton(self)
         self.rbt3 = QRadioButton(self)
         self.rbt4 = QRadioButton(self)
+        self.rbt5 = QRadioButton(self)
         
         self.rbt0.setText('NONE')
         self.rbt1.setText('파트너')
         self.rbt2.setText('장비사')
         self.rbt3.setText('SPR_NO')
         self.rbt4.setText('LGES')
+        self.rbt5.setText('날짜')
+
+        self.hbox1.addWidget(self.ed1_2)
+        self.hbox1.addWidget(self.ed1_3)
 
         self.hbox1.addWidget(self.rbt0)
         self.hbox1.addWidget(self.rbt1)
         self.hbox1.addWidget(self.rbt2)
         self.hbox1.addWidget(self.rbt3)
         self.hbox1.addWidget(self.rbt4)
+        self.hbox1.addWidget(self.rbt5)
 
         self.ed2_2 = QLineEdit()
         self.ed2_3 = QLineEdit()
         self.ed2_4 = QLineEdit()
+        self.ed2_5 = QLineEdit()
+        self.ed2_6 = QLineEdit()
         self.ed2_2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.ed2_3.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.ed2_4.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.ed2_5.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.ed2_6.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.ed2_1.setPlaceholderText('파트너')
         self.ed2_2.setPlaceholderText('장비사')
         self.ed2_3.setPlaceholderText('LGES')
         self.ed2_4.setPlaceholderText('공정')
+        self.ed2_5.setPlaceholderText('2022-06')
+        self.ed2_6.setPlaceholderText('2022-07')
 
         self.hbox2.addWidget(self.ed2_2)
         self.hbox2.addWidget(self.ed2_3)
         self.hbox2.addWidget(self.ed2_4)
+        self.hbox2.addWidget(self.ed2_5)
+        self.hbox2.addWidget(self.ed2_6)
 
         print('define')
         

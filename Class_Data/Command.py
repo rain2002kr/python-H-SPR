@@ -26,6 +26,7 @@ class Filter(Enum):
     OEM = 2
     SPR_NO = 3
     PROJECT = 4
+    DATE = 5
     
 
 
