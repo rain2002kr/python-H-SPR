@@ -1,0 +1,192 @@
+
+from PyQt5.QtCore import QCoreApplication, QBasicTimer, Qt, QTimer, QTime,QSize
+
+from Class_Data.Command import Cmd, Filter
+import pandas as pd
+from datetime import datetime
+
+import module as md
+import ui_module as uimd
+
+
+
+DEBUG_ON = 1
+DEBUG_OFF = 0
+
+debug = DEBUG_OFF
+D_main_process = DEBUG_OFF
+
+
+def ui_process1(self, cmd, date= '220701', sht_num_cnt = 0):
+        v_str_command = cmd
+        v_int_date = date
+        v_int_sht_num_cnt = int(sht_num_cnt)
+
+        if v_str_command == Cmd.INIT:
+            message =f"{Cmd.INIT.name}  SPR_DATA.xlsx 파일을 만들었습니다."
+            log(self, message)
+            md.create_new_excel()    
+            bar_timer_on(self, "start",10)
+        
+        if v_str_command == Cmd.SCREEN_CLR:
+            bar_timer_on("start",5)
+            message =f"{Cmd.SCREEN_CLR.name}  테이블 스크린을 지웠습니다."
+            log(self, message)
+            self.tbw1.clear()
+
+        
+        if v_str_command == Cmd.LOAD_SERVER:
+            message = Cmd.LOAD_SERVER.name
+            log(self, message)    
+        
+        if v_str_command == Cmd.SAVE_SERVER:
+            message = Cmd.SAVE_SERVER.name
+            log(self, message)
+
+        if v_str_command == Cmd.LOG_CLR:
+            message = Cmd.LOG_CLR.name
+            log(self, message, clear = True) 
+        
+        if v_str_command == Cmd.INPUT_CLR:
+            message = Cmd.INPUT_CLR.name
+            log(self, message, clear = True) 
+            self.ed1_1.setText("")
+            self.ed2_1.setText("")
+            self.ed2_2.setText("")
+            self.ed2_3.setText("")
+            self.ed2_4.setText("")
+            self.ed3_1.setText("")
+
+
+def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
+        v_str_command = cmd
+        v_int_date = date
+        v_int_sht_num_cnt = int(sht_num_cnt)
+
+        if v_str_command == Cmd.SPR_INFO_1:
+            bar_timer_on(self, "start",10)
+            message = Cmd.SPR_INFO_1.name
+            log(self, message)
+
+            df = md.load_spr_info_excel()
+            message = 'LOAD SPR INFO EXCEL'
+            log(self, message)
+
+            
+            if self.rbt1.isChecked():
+                message = Filter.PATHNER.name
+                log(self, message)
+                df = md.make_df_spr_info(self, df, Filter.PATHNER)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+
+
+            elif self.rbt2.isChecked():
+                message = Filter.OEM.name
+                log(self, message)
+                df = md.make_df_spr_info(self, df, Filter.OEM)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+
+            elif self.rbt3.isChecked():
+                message = Filter.SPR_NO.name
+                log(self, message)
+                df = md.make_df_spr_info(self, df, Filter.SPR_NO)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+
+            elif self.rbt4.isChecked():
+                message = Filter.PROJECT.name
+                log(self, message)
+                df = md.make_df_spr_info(self, df, Filter.PROJECT)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+            
+            else :
+                df = md.make_df_spr_info(self, df, Filter.NONE)
+                message = 'MAKE DF SPR INFO'
+                log(self, message)
+
+
+            
+            uimd.set_df_table(self,df)
+            message = 'call set table'
+            log(self, message)
+            
+        
+        if v_str_command == Cmd.FILE_JOB_0:
+            message = Cmd.FILE_JOB_0.name
+            log(self, message)    
+        
+        if v_str_command == Cmd.FILE_JOB_1:
+            message = Cmd.FILE_JOB_1.name
+            log(self, message)    
+        
+        if v_str_command == Cmd.CONVERT:
+            message = Cmd.CONVERT.name
+            log(self, message)    
+
+        if v_str_command == Cmd.CONVERT_ALL:
+            message = Cmd.CONVERT_ALL.name
+            log(self, message)    
+
+def ui_process3(self, cmd, date= '220701', sht_num_cnt = 0):
+        v_str_command = cmd
+        v_int_date = date
+        v_int_sht_num_cnt = int(sht_num_cnt)
+
+        if v_str_command == Cmd.RESULT_LOAD:
+            message = Cmd.RESULT_LOAD.name
+            log(self, message)    
+            bar_timer_on(self, "start",10)
+        
+        if v_str_command == Cmd.LOAD_SPR_FILE:
+            message = Cmd.LOAD_SPR_FILE.name
+            log(self, message)    
+        
+        if v_str_command == Cmd.SAVE_SPR_EXCEL:
+            message = Cmd.SAVE_SPR_EXCEL.name
+            log(self, message)    
+        
+        if v_str_command == Cmd.LOAD_ALL:
+            message = Cmd.LOAD_ALL.name
+            log(self, message)    
+
+        if v_str_command == Cmd.SAVE_ALL:
+            message = Cmd.SAVE_ALL.name
+            log(self, message)            
+
+def log(self, message , clear = False):
+        TODAY = datetime.today().strftime("%y-%m-%d-%H:%M:%S")
+        print('LOG : ' + TODAY + ": " + message)
+        self.tb1.append('LOG : ' + TODAY + " :  " + message)
+        if clear:
+            self.tb1.clear()
+
+
+def bar_timer_on(self, commend, base_time = 10):
+        if commend == "init": 
+            self.bar1_timer.timeout.connect(lambda : timerEvent(self,1))  
+            self.bar1.setValue(0)
+            self.bar1_time = QTime(0,0,0) 
+
+        elif commend == "start":
+            self.bar1_timer.timeout.connect(lambda : timerEvent(self,1))  
+            self.bar1.setValue(0)
+            self.bar1_time = QTime(0,0,0) 
+            self.bar1_timer.start(base_time)
+
+        elif commend == "end": 
+            self.bar1_timer.stop()
+        else :
+            print("timer 동작안함")
+
+
+def timerEvent(self, time_interval = 1):
+    self.bar1_time = self.bar1_time.addSecs(time_interval)
+    v_int_time = int(self.bar1_time.toString("ss"))
+    self.bar1.setValue(v_int_time)
+    
+    if v_int_time >= self.bar1.maximum():
+        self.bar1_timer.stop()
+        return 
