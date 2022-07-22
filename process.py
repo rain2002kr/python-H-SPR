@@ -65,9 +65,9 @@ def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
         v_int_date = date
         v_int_sht_num_cnt = int(sht_num_cnt)
 
-        if v_str_command == Cmd.SPR_INFO_1:
+        if v_str_command == Cmd.LOAD_SPR_INFO:
             bar_timer_on(self, "start",10)
-            message = Cmd.SPR_INFO_1.name
+            message = Cmd.LOAD_SPR_INFO.name
             log(self, message)
 
             df = md.load_spr_info_excel()
@@ -115,17 +115,39 @@ def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
                 df = md.make_df_spr_info(self, df, Filter.NONE)
                 message = 'MAKE DF SPR INFO'
                 log(self, message)
-
-
             
             uimd.set_df_table(self,df)
             message = 'call set table'
             log(self, message)
+        
+        if v_str_command == Cmd.SAVE_F_SPR_INFO_EXCEL:
+            bar_timer_on(self, "start",10)
+            message = Cmd.SAVE_F_SPR_INFO_EXCEL.name
+            log(self, message) 
+
+            md.save_filtered_spr_info_excel(self)
+            message = 'save_filtered_spr_info_excel()'
+            log(self, message) 
+
+
+        if v_str_command == Cmd.LOAD_SPR_SUM:
+            message = Cmd.LOAD_SPR_SUM.name
+            log(self, message)    
             
         
-        if v_str_command == Cmd.FILE_JOB_0:
+        if v_str_command == Cmd.SAVE_F_SPR_SUM_EXCEL:
+            message = Cmd.SAVE_F_SPR_SUM_EXCEL.name
+            log(self, message)    
+        
+
+def ui_process3(self, cmd, date= '220701', sht_num_cnt = 0):
+        v_str_command = cmd
+        v_int_date = date
+        v_int_sht_num_cnt = int(sht_num_cnt)
+        
+        if v_str_command == Cmd.CONVERT_ERAW_SPR:
             bar_timer_on(self, "start",10)
-            message = Cmd.FILE_JOB_0.name
+            message = Cmd.CONVERT_ERAW_SPR.name
             log(self, message)
 
             frame = md.load_spr_in_folds()
@@ -140,48 +162,18 @@ def ui_process2(self, cmd, date= '220701', sht_num_cnt = 0):
             message = 'uimd.set_df_table(self,df, 11)'
             log(self, message)
 
-
-
-        
-        if v_str_command == Cmd.FILE_JOB_1:
-            message = Cmd.FILE_JOB_1.name
-            log(self, message)    
-            
-            
-        
-        if v_str_command == Cmd.CONVERT:
-            message = Cmd.CONVERT.name
-            log(self, message)    
-
-        if v_str_command == Cmd.CONVERT_ALL:
-            message = Cmd.CONVERT_ALL.name
-            log(self, message)    
-
-def ui_process3(self, cmd, date= '220701', sht_num_cnt = 0):
-        v_str_command = cmd
-        v_int_date = date
-        v_int_sht_num_cnt = int(sht_num_cnt)
-
-        if v_str_command == Cmd.RESULT_LOAD:
-            message = Cmd.RESULT_LOAD.name
+        if v_str_command == Cmd.SAVE_SUM_SPR_EXCLE:
+            message = Cmd.SAVE_SUM_SPR_EXCLE.name
             log(self, message)    
             bar_timer_on(self, "start",10)
         
-        if v_str_command == Cmd.LOAD_SPR_FILE:
-            message = Cmd.LOAD_SPR_FILE.name
-            log(self, message)    
-        
-        if v_str_command == Cmd.SAVE_SPR_EXCEL:
-            message = Cmd.SAVE_SPR_EXCEL.name
-            log(self, message)    
-        
-        if v_str_command == Cmd.LOAD_ALL:
-            message = Cmd.LOAD_ALL.name
+        if v_str_command == Cmd.LOAD_SUM_SPR_LLP:
+            message = Cmd.LOAD_SUM_SPR_LLP.name
             log(self, message)    
 
-        if v_str_command == Cmd.SAVE_ALL:
-            message = Cmd.SAVE_ALL.name
-            log(self, message)            
+        if v_str_command == Cmd.SAVE_LLP_EXCEL:
+            message = Cmd.SAVE_LLP_EXCEL.name
+            log(self, message)        
 
 def log(self, message , clear = False):
         TODAY = datetime.today().strftime("%y-%m-%d-%H:%M:%S")

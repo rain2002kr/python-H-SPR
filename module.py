@@ -15,7 +15,7 @@ D_load_spr_info_excel = DEBUG_OFF
 D_make_df_spr_info = DEBUG_OFF
 D_load_spr_in_folds = DEBUG_OFF
 D_make_df_from_arr = DEBUG_OFF
-
+D_save_filtered_spr_info_excel = DEBUG_OFF
 
 
 D_load_time_excel = DEBUG_OFF
@@ -28,6 +28,73 @@ D_save_time_excel = DEBUG_OFF
 D_connect_sql_server = DEBUG_OFF
 D_save_time_excel_to_server = DEBUG_OFF
 D_load_time_excel_from_server = DEBUG_OFF
+
+
+# FUNCTION CODE : save_filtered_spr_info_excel
+# comment : 
+###############################################################################################    
+
+def write_qtable_to_df(table):
+    col_count = table.columnCount()
+    row_count = table.rowCount()
+    headers = [str(table.horizontalHeaderItem(i).text()) for i in range(col_count)]
+
+    # df indexing is slow, so use lists
+    df_list = []
+    for row in range(row_count):
+        df_list2 = []
+        for col in range(col_count):
+            table_item = table.item(row,col)
+            df_list2.append('' if table_item is None else str(table_item.text()))
+        df_list.append(df_list2)
+
+    df = pd.DataFrame(df_list, columns=headers)
+
+    return df
+
+
+def save_filtered_spr_info_excel(self):
+    src = r"D:\97. 업무공유파일\004. 영업\002. SPR 특가요청 DIOS\001. SPR INFO\00. SPR FILTER INFO/"
+    if self.ed2_1.text():
+        pathner = "."+self.ed2_1.text()+"."  
+    else:
+        pathner = ""  
+
+    if self.ed2_2.text():
+        oem = self.ed2_2.text()+"."
+    else:
+        oem = ""  
+
+    if self.ed2_3.text():
+        lges = self.ed2_3.text()+"."    
+    else:
+        lges = ""  
+
+    if self.ed2_4.text():
+        ps = self.ed2_4.text()+"."
+    else:
+        ps = ""  
+
+    file = f"SPR_INFO{pathner}{oem}{lges}{ps}"
+    src_path = src + file[0:-1]+".xlsx"
+
+    try:
+        df = write_qtable_to_df(self.tbw1)
+        df['금액'] = df['금액'].apply(lambda x: int(x))
+        
+        if debug or D_save_filtered_spr_info_excel:
+            SUCCESS = f'save_time_excel : SUCCESS'
+            print(f"CODE : {SUCCESS} ") 
+    
+        df.to_excel(src_path, sheet_name='INFO', index=False)
+        
+
+    except :
+        if debug or D_save_filtered_spr_info_excel:
+            ERROR = f'save_time_excel : ERROR 타임시트 엑셀에 저장실패'
+            print(f"CODE : {ERROR} ") 
+    
+
 
 # FUNCTION CODE = read_sheets() 
 # path         : 파일이 있는 경로를 지정한다. 
@@ -585,3 +652,4 @@ def save_time_excel(df1,df2,df3):
     
 
     
+

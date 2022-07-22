@@ -1,5 +1,4 @@
 import sys
-import PyQt5
 from PyQt5 import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -86,6 +85,8 @@ class Exam(QMainWindow,Ui_MainWindow):
         self.ed2_5.setPlaceholderText('2022-06')
         self.ed2_6.setPlaceholderText('2022-07')
 
+        self.ed3_1.setPlaceholderText('6ES7135-6HD00-0BA1')
+
         self.hbox2.addWidget(self.ed2_2)
         self.hbox2.addWidget(self.ed2_3)
         self.hbox2.addWidget(self.ed2_4)
@@ -95,26 +96,26 @@ class Exam(QMainWindow,Ui_MainWindow):
         print('define')
         
     def Decolation(self):
-        self.bt1_1.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt1_2.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt1_3.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt1_4.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt1_5.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt1_6.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
+        self.bt1_1.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt1_2.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt1_3.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt1_4.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt1_5.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt1_6.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
         
-        self.bt2_1.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt2_2.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt2_3.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt2_4.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt2_5.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt2_6.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
+        self.bt2_1.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt2_2.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt2_3.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt2_4.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt2_5.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt2_6.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
         
-        self.bt3_1.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt3_2.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt3_3.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt3_4.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt3_5.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
-        self.bt3_6.setStyleSheet('QPushButton {background-color: #A3C1DA; color: black;}')
+        self.bt3_1.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt3_2.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt3_3.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt3_4.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt3_5.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
+        self.bt3_6.setStyleSheet('QPushButton {background-color: #FFC0CB; color: black;}')
         
 
         self.tb1.setWordWrapMode(QTextOption.NoWrap)
@@ -124,8 +125,48 @@ class Exam(QMainWindow,Ui_MainWindow):
         
     
     def initUI(self):
-        self.bt1_5.setText("로그 지우기")
-        self.bt1_6.setText("인풋 지우기")
+        self.bt1_1.setText("INIT E.SPR")    
+        self.bt1_2.setText("CLR SCREEN")    
+        self.bt1_3.setText("LD E.SPR DB\nTO DB")    
+        self.bt1_4.setText("SV E.SPR DB\nTO DB")    
+        self.bt1_5.setText("CLR LOG")    
+        self.bt1_6.setText("CLR INPUT\nDATA")    
+        
+        self.bt1_1.setToolTip("SPR_SUM 엑셀을 생성.")
+        self.bt1_2.setToolTip("TABLE 내용 삭제.")
+        self.bt1_3.setToolTip("SQL DB 에저장된 SPR 정보를 테이블에 표기.")
+        self.bt1_4.setToolTip("SPR 엑셀정보를 SQL DB 에 저장.")
+        self.bt1_5.setToolTip("로그 삭제.")
+        self.bt1_6.setToolTip("인풋 내용을 삭제")
+
+        self.bt2_1.setText("LD E.INFO\nTO TB")    
+        self.bt2_2.setText("SV TB TO\nE.F.INFO")    
+        self.bt2_3.setText("-")    
+        self.bt2_4.setText("-")    
+        self.bt2_5.setText("LD E.SPR\nTO TB")    
+        self.bt2_6.setText("SV TB\nE.F.SPR")    
+        
+        self.bt2_1.setToolTip("SPR_INFO 엑셀을 테이블로 로딩.")
+        self.bt2_2.setToolTip("필터된 SPR_INFO 를 저장.")
+        self.bt2_3.setToolTip("")
+        self.bt2_4.setToolTip("")
+        self.bt2_5.setToolTip("SPR_SUM 엑셀을 테이블로 로딩")
+        self.bt2_6.setToolTip("테이블데이터를 필터된 SPR_SUM 엑셀에 저장")
+
+        self.bt3_1.setText("CT E.RAW\nTO TB")    
+        self.bt3_2.setText("SV TB TO\nE.SPR")    
+        self.bt3_3.setText("-")    
+        self.bt3_4.setText("-")    
+        self.bt3_5.setText("LD E.SPR\nLLP TO TB")    
+        self.bt3_6.setText("SV TB TO\nE.LLP")    
+
+        self.bt3_1.setToolTip("RAW SPR 엑셀을 테이블로 로딩.")
+        self.bt3_2.setToolTip("로딩된 SPR DF와 E.SPR DF를 비교해서 합쳐서 엑셀에 저장")
+        self.bt3_3.setToolTip("")
+        self.bt3_4.setToolTip("")
+        self.bt3_5.setToolTip("SPR_SUM 엑셀에 MLFB 를 가지고 LLP 정보 테이블로 로딩")
+        self.bt3_6.setToolTip("테이블데이터를 LLP 엑셀에 저장")
+
         self.setWindowTitle('SPR 관리 앱')
         self.bar1.setOrientation(Qt.Horizontal)
         self.bar1.setRange(0,30)
@@ -142,17 +183,19 @@ class Exam(QMainWindow,Ui_MainWindow):
         self.bt1_5.clicked.connect(lambda x: ps.ui_process1(self,Cmd.LOG_CLR))
         self.bt1_6.clicked.connect(lambda x: ps.ui_process1(self,Cmd.INPUT_CLR))
 
-        self.bt2_1.clicked.connect(lambda x: ps.ui_process2(self,Cmd.SPR_INFO_1))
-        self.bt2_2.clicked.connect(lambda x: ps.ui_process2(self,Cmd.FILE_JOB_0))
-        self.bt2_3.clicked.connect(lambda x: ps.ui_process2(self,Cmd.FILE_JOB_1))
-        self.bt2_4.clicked.connect(lambda x: ps.ui_process2(self,Cmd.CONVERT))
-        self.bt2_5.clicked.connect(lambda x: ps.ui_process2(self,Cmd.CONVERT_ALL))
+        self.bt2_1.clicked.connect(lambda x: ps.ui_process2(self,Cmd.LOAD_SPR_INFO))
+        self.bt2_2.clicked.connect(lambda x: ps.ui_process2(self,Cmd.SAVE_F_SPR_INFO_EXCEL))
+        # self.bt2_3.clicked.connect(lambda x: ps.ui_process2(self,Cmd.FILE_JOB_1))
+        # self.bt2_4.clicked.connect(lambda x: ps.ui_process2(self,Cmd.CONVERT))
+        self.bt2_5.clicked.connect(lambda x: ps.ui_process2(self,Cmd.LOAD_SPR_SUM))
+        self.bt2_6.clicked.connect(lambda x: ps.ui_process2(self,Cmd.SAVE_F_SPR_SUM_EXCEL))
         
-        self.bt3_1.clicked.connect(lambda x: ps.ui_process3(self,Cmd.RESULT_LOAD))
-        self.bt3_2.clicked.connect(lambda x: ps.ui_process3(self,Cmd.LOAD_SPR_FILE))
-        self.bt3_3.clicked.connect(lambda x: ps.ui_process3(self,Cmd.SAVE_SPR_EXCEL))
-        self.bt3_4.clicked.connect(lambda x: ps.ui_process3(self,Cmd.LOAD_ALL))
-        self.bt3_5.clicked.connect(lambda x: ps.ui_process3(self,Cmd.SAVE_ALL))
+        self.bt3_1.clicked.connect(lambda x: ps.ui_process3(self,Cmd.CONVERT_ERAW_SPR))
+        self.bt3_2.clicked.connect(lambda x: ps.ui_process3(self,Cmd.SAVE_SUM_SPR_EXCLE))
+        # self.bt3_3.clicked.connect(lambda x: ps.ui_process3(self,Cmd.SAVE_SPR_EXCEL))
+        # self.bt3_4.clicked.connect(lambda x: ps.ui_process3(self,Cmd.LOAD_ALL))
+        self.bt3_5.clicked.connect(lambda x: ps.ui_process3(self,Cmd.LOAD_SUM_SPR_LLP))
+        self.bt3_6.clicked.connect(lambda x: ps.ui_process3(self,Cmd.SAVE_LLP_EXCEL))
         
 
 
